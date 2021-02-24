@@ -1,46 +1,26 @@
-const baseURL = "https://ci-swapi.herokuapp.com/api/";
-
-function getData(type, cb) {
-    var xhr = new XMLHttpRequest();
-
-    xhr.onreadystatechange = function() {
-        if (this.readyState == 4 && this.status == 200) {
-            cb(JSON.parse(this.responseText));
-        }
-    };
-
-    xhr.open("GET", baseURL + type + "/");
-    xhr.send();
-}
-
-function getTableHeaders(obj) {
-    var tableHeaders = [];
-
-    Object.keys(obj).forEach(function(key) {
-        tableHeaders.push(`<td>${key}</td>`)
-    });
-
-    return `<tr>${tableHeaders}</tr>`;
-}
-
-function writeToDocument(type) {
-    var tableRows = [];
-    var el = document.getElementById("data");
-
-    getData(type, function(data) {
-        data = data.results;
-        var tableHeaders = getTableHeaders(data[0]);
-
-        data.forEach(function(item) {
-            var dataRow = [];
-            Object.keys(item).forEach(function(key) {
-                var rowData = item[key].toString();
-                var truncatedData = rowData.substring(0, 15);
-                dataRow.push(`<td>${truncatedData}</td>`);
-            });
-            tableRows.push(`<tr>${dataRow}</tr>`)
-        });
-
-        el.innerHTML = `<table>${tableHeaders}${tableRows}</table>`;
-    });
-}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+<meta name="Description" content="Enter your description here"/>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.0/css/all.min.css">
+<link rel="stylesheet" href="assets/css/style.css">
+<script type="text/javascript" src="main.js"></script>
+<title>AJAX test</title>
+</head>
+<body>
+    <button onclick="writeToDocument('people')">People</button>
+    <button onclick="writeToDocument('planets')">Planets</button>
+    <button onclick="writeToDocument('species')">Species</button>
+    <button onclick="writeToDocument('starships')">Starships</button>
+    <button onclick="writeToDocument('films')">Films</button>
+    <div id="data"></div>
+    
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.slim.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.1/umd/popper.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
